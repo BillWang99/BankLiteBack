@@ -1,0 +1,6 @@
+@BankLiteBack_HostAddress = http://localhost:5054
+
+GET {{BankLiteBack_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
