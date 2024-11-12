@@ -9,6 +9,9 @@ namespace BankLiteBack.Models
         public int Id {  get; set; }
 
         [Required]
+        public Guid Token { get; set; }
+
+        [Required]
         public string Name { get; set; }
 
         [Required]
@@ -25,7 +28,7 @@ namespace BankLiteBack.Models
 
         [Required]
         [DefaultValue(false)]
-        public bool IsDeleted { get; set; }
+        public bool IsDelete { get; set; }
 
         //關聯
         public ICollection<Transactions> Transactions { get; set; }

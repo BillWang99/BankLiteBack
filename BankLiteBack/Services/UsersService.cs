@@ -2,10 +2,11 @@
 using BankLiteBack.Data;
 using System.Text;
 using System.Security.Cryptography;
+using BankLiteBack.Interfaces;
 
 namespace BankLiteBack.Services
 {
-    public class UsersService
+    public class UsersService:IUsersService
     {
         //資料庫連線
         private readonly DefaultContext _context;
@@ -16,9 +17,9 @@ namespace BankLiteBack.Services
         }
 
         //查詢所有帳號
-        public List<Accounts> GetAccounts()
+        public List<Users> GetAccounts()
         {
-            List<Accounts> accounts = _context.Accounts
+            List<Users> accounts = _context.Users
                 .Where(a => a.IsDelete == false)
                 .ToList();
 
@@ -26,22 +27,22 @@ namespace BankLiteBack.Services
         }
 
         //查詢選擇的帳號
-        public Accounts GetAccount(int id)
+        public Users GetAccount(int id)
         {
-            return _context.Accounts
+            return _context.Users
                 .Where(a => a.Id == id && a.IsDelete == false)
                 .FirstOrDefault();
         }
 
         //建立帳號
         public void CreateAccount(UserForm data)
-        {
-            
+        {  
             Users NewUser = new Users
             {
                 Name = data.Name,
                 Account = data.Account,
                 Password = HashPassword(data.Password),
+                Token = Guid.NewGuid(),
                 CreateTime = DateTime.Now,
                 UpdateTime = DateTime.Now,
             };
@@ -55,7 +56,7 @@ namespace BankLiteBack.Services
         public void UpdateAccount(UserForm data, int Id) 
         {
             Users user = _context.Users
-                .Where(u => u.Id == Id && u.IsDeleted == false)
+                .Where(u => u.Id == Id && u.IsDelete == false)
                 .FirstOrDefault();
 
             if(user != null)
@@ -81,7 +82,7 @@ namespace BankLiteBack.Services
 
             if (user != null) 
             {
-                user.IsDeleted = true;
+                user.IsDelete = true;
             }
 
             _context.Update(user);
