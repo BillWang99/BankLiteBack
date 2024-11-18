@@ -52,14 +52,16 @@ namespace BankLiteBack.Controllers
         // PUT api/<UsersController>/5
         //修改帳號資訊
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put(int id, [FromBody] UserEditForm data)
         {
+            _usersService.UpdateAccount(data, id);
         }
 
         // DELETE api/<UsersController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            _usersService.DeleteAccount(id);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace BankLiteBack.Interfaces
         public void CreateAccount(UserForm data);
 
         //修改帳號
-        public void UpdateAccount(UserForm data, int Id);
+        public void UpdateAccount(UserEditForm data, int Id);
 
         //刪除帳號
         public void DeleteAccount(int Id);

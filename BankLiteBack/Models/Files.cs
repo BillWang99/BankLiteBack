@@ -12,10 +12,13 @@ namespace BankLiteBack.Models
         public int GroupId {  get; set; }
 
         [Required]
-        public string FileName { get; set; }
+        public string UniqueName { get; set; }
 
         [Required]
         public string OriginName {  get; set; }
+
+        [Required]
+        public string FilePath { get; set; }
 
         [Required]
         public DateTime CreateTime { get; set; }
@@ -27,7 +30,5 @@ namespace BankLiteBack.Models
         [DefaultValue(false)]
         public bool IsDeleted { get; set; }
 
-        //關聯
-        public Transactions Transactions { get; set; }//交易紀錄
     }
 }

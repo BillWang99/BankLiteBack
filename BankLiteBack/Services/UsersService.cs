@@ -53,7 +53,7 @@ namespace BankLiteBack.Services
         }
 
         //修改帳號
-        public void UpdateAccount(UserForm data, int Id) 
+        public void UpdateAccount(UserEditForm data, int Id) 
         {
             Users user = _context.Users
                 .Where(u => u.Id == Id && u.IsDelete == false)
@@ -91,7 +91,7 @@ namespace BankLiteBack.Services
         }
 
         //密碼加密
-        private string HashPassword(string Password) 
+        public static string HashPassword(string Password) 
         {
             //雜湊演算法
             var sha256 = SHA256.Create();

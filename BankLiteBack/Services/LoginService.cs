@@ -19,7 +19,7 @@ namespace BankLiteBack.Services
         //登入
         public LoginSuccess LoginSuccess(LoginForm loginForm)
         {
-            loginForm.Password = HashPassword(loginForm.Password);
+            loginForm.Password = UsersService.HashPassword(loginForm.Password);
 
             LoginSuccess result = _context.Users
                 .Where(r => r.Account == loginForm.Account 
@@ -27,6 +27,7 @@ namespace BankLiteBack.Services
                 && r.IsDelete == false)
                 .Select(r => new LoginSuccess
                 {
+                    Id = r.Id,
                     Name = r.Name,
                     Token = r.Token,
                 })
@@ -36,25 +37,6 @@ namespace BankLiteBack.Services
 
         }
 
-        //密碼加密
-        private string HashPassword(string Password)
-        {
-            //雜湊演算法
-            var sha256 = SHA256.Create();
-
-            //讀取密碼前3個字元
-            var salt = Password.Substring(0, 3);
-
-            //原始密碼加工
-            var passwordSalt = Password + salt;
-
-            //使用UTF8編碼
-            var byteValue = Encoding.UTF8.GetBytes(passwordSalt);
-
-            //進行加密
-            var byteHash = sha256.ComputeHash(byteValue);
-
-            return Convert.ToBase64String(byteHash);
-        }
+       
     }
 }

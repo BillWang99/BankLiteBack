@@ -12,7 +12,7 @@ namespace BankLiteBack.Models
         public string Name { get; set; }
 
         [Required]
-        public string Type { get; set; }
+        public int AccountTypesId { get; set; }
 
         [Required]
         [DefaultValue(0)]
@@ -28,8 +28,9 @@ namespace BankLiteBack.Models
         [DefaultValue(false)]
         public bool IsDelete { get; set; } 
         
-
         //關聯
         public ICollection<Transactions> Transactions { get; set; }//交易紀錄
+
+        public AccountTypes AccountTypes { get; set; }//帳戶類型
     }
 }

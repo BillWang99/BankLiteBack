@@ -4,6 +4,7 @@ using BankLiteBack.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankLiteBack.Migrations
 {
     [DbContext(typeof(DefaultContext))]
-    partial class DefaultContextModelSnapshot : ModelSnapshot
+    [Migration("20241116035947_Update_AccountTypes_Table")]
+    partial class Update_AccountTypes_Table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,6 +75,10 @@ namespace BankLiteBack.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("UpdateTime")
                         .HasColumnType("datetime2");
 
@@ -93,7 +100,7 @@ namespace BankLiteBack.Migrations
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FilePath")
+                    b.Property<string>("FileName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -107,12 +114,8 @@ namespace BankLiteBack.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TransactionsId")
+                    b.Property<int>("TransactionsId")
                         .HasColumnType("int");
-
-                    b.Property<string>("UniqueName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdateTime")
                         .HasColumnType("datetime2");
@@ -145,11 +148,8 @@ namespace BankLiteBack.Migrations
                     b.Property<int?>("FileId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsDelete")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
-
-                    b.Property<int>("Method")
-                        .HasColumnType("int");
 
                     b.Property<int>("Money")
                         .HasColumnType("int");
@@ -214,7 +214,7 @@ namespace BankLiteBack.Migrations
             modelBuilder.Entity("BankLiteBack.Models.Accounts", b =>
                 {
                     b.HasOne("BankLiteBack.Models.AccountTypes", "AccountTypes")
-                        .WithMany()
+                        .WithMany("Accounts")
                         .HasForeignKey("AccountTypesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -224,9 +224,13 @@ namespace BankLiteBack.Migrations
 
             modelBuilder.Entity("BankLiteBack.Models.Files", b =>
                 {
-                    b.HasOne("BankLiteBack.Models.Transactions", null)
+                    b.HasOne("BankLiteBack.Models.Transactions", "Transactions")
                         .WithMany("files")
-                        .HasForeignKey("TransactionsId");
+                        .HasForeignKey("TransactionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("BankLiteBack.Models.Transactions", b =>
@@ -246,6 +250,11 @@ namespace BankLiteBack.Migrations
                     b.Navigation("Account");
 
                     b.Navigation("user");
+                });
+
+            modelBuilder.Entity("BankLiteBack.Models.AccountTypes", b =>
+                {
+                    b.Navigation("Accounts");
                 });
 
             modelBuilder.Entity("BankLiteBack.Models.Accounts", b =>

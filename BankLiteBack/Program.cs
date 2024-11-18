@@ -21,6 +21,10 @@ builder.Services.AddSwaggerGen();
 //Service & Interface
 builder.Services.AddScoped<IUsersService, UsersService>();//使用者帳號相關
 builder.Services.AddScoped<ILoginService, LoginService>();//使用者登入
+builder.Services.AddScoped<IAccountsServices, AccountsService>();//帳戶相關
+builder.Services.AddScoped<IAccountTypesService, AccountTypesService>();//帳戶類型
+builder.Services.AddScoped<IFilesService, FilesService>();//檔案相關
+builder.Services.AddScoped<ITransactionsService, TransactionsService>();//交易紀錄相關
 
 var app = builder.Build();
 
@@ -32,6 +36,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 
