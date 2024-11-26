@@ -31,8 +31,10 @@ namespace BankLiteBack.Services
 
             var query = from Accounts in _context.Accounts
                                          join AccountTypes in _context.AccountTypes on Accounts.AccountTypesId equals AccountTypes.Id
+                                         where Accounts.IsDelete == false
                                          select new AccountInfo
                                          {
+                                             Id = Accounts.Id,
                                              Name = Accounts.Name,
                                              Type = Accounts.AccountTypesId,
                                              TypeName = AccountTypes.Name,

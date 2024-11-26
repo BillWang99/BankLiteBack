@@ -6,9 +6,25 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+//cors
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+    builder =>
+    {
+        builder.AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
+
+
 //SQL³s½u¦r¦ê
 builder.Services.AddDbContext<DefaultContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultContext")));
+
+
 
 
 // Add services to the container.
@@ -36,6 +52,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("AllowAllOrigins");
 
 app.UseStaticFiles();
 

@@ -2,6 +2,9 @@
 using BankLiteBack.Enum;
 using BankLiteBack.Interfaces;
 using BankLiteBack.Models;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Extensions;
+using System;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BankLiteBack.Services
@@ -132,6 +135,89 @@ namespace BankLiteBack.Services
             _context.SaveChanges();
 
             return (int)TransferStatus.success;
+        }
+
+        //查詢交易紀錄
+        public List<TransactionHistory> TransferHistory(TransferHistoryForm data)
+        {
+            var query = from Transactions in _context.Transactions
+                        join Accounts in _context.Accounts
+                        on Transactions.AccountId equals Accounts.Id
+                        select new TransactionHistory
+                        {
+                            Id = Transactions.Id,
+                            accountId = Transactions.AccountId,
+                            accountName = Accounts.Name,
+                            method = (int)Transactions.Method,
+                            methodName = Transactions.Method.GetDisplayName(),
+                            money = Transactions.Money,
+                            Event = Transactions.Event,
+                            note = Transactions.Note,
+                            GroupId = Transactions.FileId,
+                            CreateTime = DateOnly.FromDateTime(Transactions.CreateTime),
+                        };
+
+            if (!data.startDate.IsNullOrEmpty())
+            {
+                DateOnly startDate = DateOnly.Parse(data.startDate);
+                query = query.Where(t => t.CreateTime >= startDate);
+            }
+
+            if (!data.endDate.IsNullOrEmpty())
+            {
+                DateOnly endDate = DateOnly.Parse(data.endDate);
+                query = query.Where(t => t.CreateTime <= endDate);
+            }
+
+            if (data.accountId > 0)
+            {
+                query = query.Where(t => t.accountId == data.accountId);
+            }
+
+            if(data.methodId > 0)
+            {
+                query = query.Where(t => (int)t.method == data.methodId);
+            }
+
+            //倒序排列
+            query = query.OrderByDescending(t => t.Id);
+
+            List<TransactionHistory>result = query.ToList();
+
+            return result;
+           
+        }
+
+        //取得交易事件明細(包含圖檔)
+        public TransactionHistoryInfo TransactionHistoryInfo(int id)
+        {
+            var query = from Transactions in _context.Transactions
+                        join Accounts in _context.Accounts
+                        on Transactions.AccountId equals Accounts.Id
+                        select new TransactionHistoryInfo
+                        {
+                            Id = Transactions.Id,
+                            accountName = Accounts.Name,
+                            methodName = Transactions.Method.GetDisplayName(),
+                            money = Transactions.Money,
+                            Event = Transactions.Event,
+                            note = Transactions.Note,
+                            GroupId = Transactions.FileId,
+                            CreateTime = DateOnly.FromDateTime(Transactions.CreateTime),
+                        };
+
+            query = query.Where(t => t.Id == id);
+
+            TransactionHistoryInfo result = query.First();
+
+            //加入圖檔
+            List<string> filesPath = _context.Files
+                .Where(f => f.GroupId == result.GroupId)
+                .Select(f => f.FilePath).ToList();
+
+            result.filesPath = filesPath;
+
+            return result;
         }
     }
 }

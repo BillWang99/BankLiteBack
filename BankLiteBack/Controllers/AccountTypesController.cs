@@ -32,7 +32,7 @@ namespace BankLiteBack.Controllers
 
         //新增類別
         [HttpPost]
-        public IActionResult Post(string typeName) 
+        public IActionResult Post([FromBody] string typeName) 
         {
             if (typeName.IsNullOrEmpty())
             {
@@ -46,7 +46,7 @@ namespace BankLiteBack.Controllers
 
         //編輯
         [HttpPut("{id}")]
-        public IActionResult Put(int id, string typeName)
+        public IActionResult Put(int id, [FromBody] string typeName)
         {
             if (typeName.IsNullOrEmpty())
             {

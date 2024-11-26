@@ -54,6 +54,9 @@ namespace BankLiteBack.Controllers
                     //設定上傳目錄
                     var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
+                    //建立url
+                    var fileUrl = $"http://banklite.com.tw/uploads/{uniqueFileName}";
+
                     //上傳檔案
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
@@ -66,7 +69,7 @@ namespace BankLiteBack.Controllers
                         GroupId = GroupId,
                         UniqueName = uniqueFileName,
                         OriginName = file.FileName,
-                        FilePath = filePath,
+                        FilePath = fileUrl,
                         CreateTime = DateTime.Now,
                         UpdateTime = DateTime.Now,
                         IsDeleted = false,

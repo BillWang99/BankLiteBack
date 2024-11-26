@@ -19,6 +19,8 @@ namespace BankLiteBack.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder) 
         { 
             modelBuilder.Entity<Transactions>().Property(t => t.Method).HasConversion<int>();
+
+            
         }
     }
 }

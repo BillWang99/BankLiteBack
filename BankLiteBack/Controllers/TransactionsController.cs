@@ -16,9 +16,15 @@ namespace BankLiteBack.Controllers
         {
             _transactionsService = transactionsService;
         }
+        [HttpPost("history")]
+        public IActionResult History([FromBody] TransferHistoryForm data)
+        {
+            var result = _transactionsService.TransferHistory(data);
+            return Ok(result);
+        }
 
         [HttpPost]
-        public IActionResult AddTransaction(TransactionForm data)
+        public IActionResult AddTransaction([FromBody] TransactionForm data)
         {
             _transactionsService.AddTranscation(data);
 
@@ -26,11 +32,11 @@ namespace BankLiteBack.Controllers
         }
 
         [HttpPost("Transfer")]
-        public IActionResult TransferMoney(TransferForm data)
+        public IActionResult TransferMoney([FromBody] TransferForm data)
         {
             int result = _transactionsService.TransferMoney(data);
 
-            if(result == (int)TransferStatus.success)
+            if (result == (int)TransferStatus.success)
             {
                 return Ok();
             }
@@ -38,6 +44,12 @@ namespace BankLiteBack.Controllers
             {
                 return BadRequest("金額不可為0且金額不可大於轉出帳戶餘額");
             }
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult TransactionHistoryInfo(int id)
+        {
+            return  Ok(_transactionsService.TransactionHistoryInfo(id));
         }
     }
 }

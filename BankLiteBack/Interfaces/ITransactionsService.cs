@@ -9,5 +9,11 @@ namespace BankLiteBack.Interfaces
 
         //轉帳
         public int TransferMoney(TransferForm data);
+
+        //查詢交易紀錄
+        public List<TransactionHistory> TransferHistory(TransferHistoryForm data);
+
+        //取得交易事件明細(包含圖檔)
+        public TransactionHistoryInfo TransactionHistoryInfo(int id);
     }
 }

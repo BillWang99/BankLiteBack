@@ -19,9 +19,9 @@ namespace BankLiteBack.Controllers
         // GET: api/<AccountController>
         //取得帳戶資訊
         [HttpGet]
-        public AccountPageData Get()
+        public ActionResult<AccountPageData> Get()
         {
-            return _accountsServices.AccountInfo();
+            return Ok(_accountsServices.AccountInfo());
         }
 
         // GET api/<AccountController>/5
@@ -56,9 +56,11 @@ namespace BankLiteBack.Controllers
         // DELETE api/<AccountController>/5
         //刪除帳戶
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
             _accountsServices.DeleteAccount(id);
+
+            return Ok();
         }
     }
 }

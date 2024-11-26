@@ -34,7 +34,7 @@ namespace BankLiteBack.Controllers
             if(result == null)
             {
                 //帳號為空，回傳錯誤訊息
-                return Ok("查無帳號");
+                return BadRequest("查無帳號");
             }
 
             return Ok(result);
